@@ -1,6 +1,11 @@
-# RetroAchievementsRandom
+<h1>
+  <img src="https://static.retroachievements.org/assets/images/ra-icon.webp" width="100" alt="Banner">
+  RetroAchievements Scripts
+</h1>
 
-## user-login.py
+Assortment of random scripts to automate information extraction from [retroachievements.org](https://retroachievements.org/).
+
+## :key: user-login.py
 
 This script logs a user into [retroachievements.org](https://retroachievements.org/), fetches the user's profile page, and extracts the Web API Key.
 
@@ -13,7 +18,7 @@ This script logs a user into [retroachievements.org](https://retroachievements.o
    - Parse the profile page to extract the Web API Key.
    - Print success message or error based on the result.
 
-## game-icon-extract.py
+## :video_game: game-icon-extract.py
 
 This script fetches a list of games and their icons from [retroachievements.org](https://retroachievements.org/), and displays them in a scrollable table using a Tkinter GUI.
 
