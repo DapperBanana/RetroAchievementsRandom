@@ -1,5 +1,5 @@
 # RetroAchievementsRandom
----
+
 ## user-login.py
 
 This script logs a user into [retroachievements.org](https://retroachievements.org/), fetches the user's profile page, and extracts the Web API Key.
