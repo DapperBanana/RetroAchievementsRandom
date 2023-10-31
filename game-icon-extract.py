@@ -7,7 +7,7 @@ from tkinter import scrolledtext
 from PIL import Image, ImageTk
 from io import BytesIO
 
-# Define the URL of the website
+# Define the URL of the website to scrape
 url = 'https://retroachievements.org/gameList.php?c=2'
 
 # Send an HTTP GET request to the URL
@@ -17,7 +17,7 @@ if response.status_code == 200:
     # Parse the HTML content of the page
     tree = html.fromstring(response.text)
 
-    # Extract the table name
+    # Extract the name of the table from the page
     table_name = tree.xpath('/html/body/div[2]/main/article/h2/span/text()')[0]
 
     # Extract the total number of rows to loop through
@@ -31,16 +31,16 @@ if response.status_code == 200:
 
     # Loop through rows and extract game IDs, game names, and image URLs
     for row_num in range(2, total_rows):
-        # Game ID
+        # Extract the Game ID
         game_id_xpath = f'/html/body/div[2]/main/article/div[3]/table/tbody/tr[{row_num}]/td[1]/div/a'
         game_id_element = tree.xpath(game_id_xpath)[0]
         game_id = game_id_element.get('x-data').split("'")[-2].strip()
 
-        # Game Name
+        # Extract the Game Name
         game_name_xpath = f'/html/body/div[2]/main/article/div[3]/table/tbody/tr[{row_num}]/td[1]/div/a/p'
         game_name = tree.xpath(game_name_xpath)[0].text_content().strip().replace('\n', '')
 
-        # Image URL
+        # Extract the Image URL
         image_url_xpath = f'/html/body/div[2]/main/article/div[3]/table/tbody/tr[{row_num}]/td[1]/div/a/img'
         image_url = tree.xpath(image_url_xpath)[0].get('src')
 
@@ -49,7 +49,7 @@ if response.status_code == 200:
         game_names.append(game_name)
         image_urls.append(image_url)
 
-    # Create a DataFrame
+    # Create a DataFrame to store the extracted data
     data = {
         'Game ID': game_ids,
         'Game Name': game_names,
@@ -58,7 +58,7 @@ if response.status_code == 200:
 
     df = pd.DataFrame(data)
 
-    # Create a tkinter window
+    # Create a tkinter window for displaying the data
     root = tk.Tk()
     root.title("Scrollable Table with Images")
 
@@ -94,7 +94,7 @@ if response.status_code == 200:
     frame.update_idletasks()
     canvas.config(scrollregion=canvas.bbox("all"))
 
-    # Start the tkinter main loop
+    # Start the tkinter main loop to display the data
     root.mainloop()
 
 else:
