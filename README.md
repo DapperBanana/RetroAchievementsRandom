@@ -32,3 +32,20 @@ This script fetches a list of games and their icons from [retroachievements.org]
    - Start the Tkinter main loop to render the GUI.
 
 Upon failure in fetching the page, an error message is printed to the console.
+
+## :joystick: game-info-extract.py
+
+This script scrapes detailed game information from a specific game page on [retroachievements.org](https://retroachievements.org/). It fetches and displays the game's basic details, achievements, and similar games in a scrollable window using the Tkinter GUI.
+
+1. **Libraries**: `requests` and `lxml` for HTTP requests and HTML parsing, `tkinter` for GUI rendering.
+2. **Steps**:
+   - Construct the URL using the provided game ID.
+   - Send an HTTP GET request to fetch the game page content.
+   - Parse the HTML to extract game details, including name, system, developer, publisher, genres, release date, achievements, and similar games.
+   - Organize the extracted data into dictionaries.
+   - Set up a Tkinter window with a text widget and scrollbar.
+   - Populate the text widget with the game details in a formatted manner.
+   - Start the Tkinter main loop to render the GUI.
+
+If the request fails or the page content cannot be parsed as expected, an error message is printed to the console.
+
