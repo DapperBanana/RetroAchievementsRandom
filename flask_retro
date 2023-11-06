@@ -1,0 +1,67 @@
+
+# A very simple Flask Hello World app for you to get started with...
+import requests
+from flask import Flask, request, jsonify
+from bs4 import BeautifulSoup
+
+
+
+app = Flask(__name__)
+
+@app.route('/', methods =['GET', 'POST'])
+def hello_world():
+    return 'Hello from Austin!'
+
+@app.route('/retro-login',  methods=['GET'])
+def retrologin():
+
+    # Create a session for making HTTP requests
+    session = requests.Session()
+
+    # Set up user credentials
+    UserName = request.args.get('username', None)
+    Password = request.args.get('password', None)
+
+    if UserName and Password:
+        # Fetch the login page
+        login_url = 'https://retroachievements.org/login'
+        response = session.get(login_url)
+
+        # Parse the CSRF token from the login page
+        soup = BeautifulSoup(response.text, 'html.parser')
+        csrf_token = soup.find('input', {'name': '_token'})['value']
+
+        # Perform login
+        login_data = {
+            '_token': csrf_token,
+            'User': UserName,
+            'password': Password
+        }
+        login_response = session.post(login_url, data=login_data, allow_redirects=True)
+
+        # Fetch the user profile page
+        profile_url = 'https://retroachievements.org/controlpanel.php'
+        profile_response = session.get(profile_url)
+
+        # Parse the user profile page
+        profile_soup = BeautifulSoup(profile_response.text, 'html.parser')
+
+        # Using a CSS selector to extract specific information
+        element = profile_soup.select_one("body > div:nth-child(5) > main > article > div > div:nth-child(4) > table > tbody > tr:nth-child(1) > td:nth-child(2) > input")
+        value = element['value'] if element else None
+
+        # Check if the login was successful
+        if value:
+            user_data = {
+                "Username": UserName,
+                "Web API Key": value
+            }
+
+            return jsonify(user_data), 200
+        else:
+            return jsonify({"error": "Incorrect credentials or login failed."}), 401
+    else:
+        return jsonify({"error": "Username or password not provided."}), 400
+
+if __name__ == '__main__':
+    app.run(debug=True)
